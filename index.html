@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Campus Reuse Hub - Student Marketplace</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="logo">
+        <a href="#home" onclick="showSection('home')">
+          <span class="logo-icon">🌿</span> Campus Reuse Hub
+        </a>
+      </div>
+      <nav class="nav-links">
+        <a href="#home" class="nav-link active" onclick="showSection('home')">Home</a>
+        <a href="#browse" class="nav-link" onclick="showSection('browse')">Browse Items</a>
+        <a href="#sell" class="nav-link nav-btn-sell" onclick="showSection('sell')">+ Sell an Item</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="main-content">
+
+    <!-- Home Section -->
+    <section id="home-section" class="content-section">
+      <div class="hero">
+        <span class="project-tag">Student Marketplace</span>
+        <h1>Campus Reuse Hub</h1>
+        <p class="tagline">A student-to-student marketplace to buy and sell used books, calculators, stationery, electronics, and hostel essentials at student-friendly prices.</p>
+      </div>
+
+      <!-- Search & Filter Bar -->
+      <div class="search-box">
+        <div class="search-input-wrapper">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="searchInput" placeholder="Search items by name or category (e.g. Maths, Casio, Lamp, Kettle)...">
+        </div>
+        <button class="btn-green" onclick="handleSearch()">Search</button>
+        <button class="btn-secondary" onclick="resetSearch()">Reset</button>
+      </div>
+
+      <!-- Category Filter Pills -->
+      <div class="category-filter">
+        <span class="filter-label">Categories:</span>
+        <button class="cat-btn active" onclick="filterByCategory('All')">All</button>
+        <button class="cat-btn" onclick="filterByCategory('Books')">📚 Books</button>
+        <button class="cat-btn" onclick="filterByCategory('Calculators')">🔢 Calculators</button>
+        <button class="cat-btn" onclick="filterByCategory('Stationery')">📐 Stationery</button>
+        <button class="cat-btn" onclick="filterByCategory('Electronics')">💡 Electronics</button>
+        <button class="cat-btn" onclick="filterByCategory('Hostel Items')">🛏️ Hostel Items</button>
+      </div>
+
+      <!-- Available Items Section -->
+      <div class="items-header">
+        <div>
+          <h2>Available Campus Items</h2>
+          <p class="section-subtitle">Verified listings from students on campus</p>
+        </div>
+        <span id="itemsCount" class="items-count">Showing all items</span>
+      </div>
+
+      <!-- Products Grid -->
+      <div id="productGrid" class="product-grid">
+        <!-- Products injected via script.js -->
+      </div>
+    </section>
+
+    <!-- Sell an Item Section -->
+    <section id="sell-section" class="content-section" style="display: none;">
+      <div class="form-card">
+        <div class="form-header">
+          <h2>Sell an Item to Other Students</h2>
+          <p class="form-desc">List your pre-owned item in under a minute. Fellow campus students will be able to see your listing immediately.</p>
+        </div>
+
+        <form id="sellForm" onsubmit="handleSellSubmit(event)">
+          <div class="form-group">
+            <label for="itemName">Item Name *</label>
+            <input type="text" id="itemName" placeholder="e.g. Engineering Mathematics - B.S. Grewal" required>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="itemCategory">Category *</label>
+              <select id="itemCategory" required>
+                <option value="">-- Select Category --</option>
+                <option value="Books">Books</option>
+                <option value="Calculators">Calculators</option>
+                <option value="Stationery">Stationery</option>
+                <option value="Electronics">Electronics</option>
+                <option value="Hostel Items">Hostel Items</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="itemPrice">Price (in ₹) *</label>
+              <input type="number" id="itemPrice" placeholder="e.g. 450" min="0" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="itemCondition">Condition *</label>
+              <select id="itemCondition" required>
+                <option value="">-- Select Condition --</option>
+                <option value="Like New">Like New (Almost untouched)</option>
+                <option value="Good">Good (Minor usage marks)</option>
+                <option value="Fair">Fair (Well used but works fine)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="sellerContact">Your Contact Details *</label>
+              <input type="text" id="sellerContact" placeholder="e.g. WhatsApp: 9876543210 (Hostel Block B, Room 204)" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="itemImageUrl">Product Image URL <span class="optional-tag">(Optional - Leave blank for automatic category photo)</span></label>
+            <input type="url" id="itemImageUrl" placeholder="Paste image link, or leave blank to use default category image">
+          </div>
+
+          <div class="form-group">
+            <label for="itemDescription">Description *</label>
+            <textarea id="itemDescription" rows="4" placeholder="Mention edition, semester, reason for selling, or any condition details..." required></textarea>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn-green btn-large">Post Listing Now</button>
+            <button type="button" class="btn-secondary" onclick="resetSellForm()">Clear Form</button>
+          </div>
+        </form>
+
+        <div id="formSuccessNotice" class="success-notice" style="display: none;">
+          ✓ Item successfully listed! Redirecting to available items...
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Product Details Modal -->
+  <div id="detailsModal" class="modal" style="display: none;">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal()">&times;</span>
+      
+      <div class="modal-body">
+        <div class="modal-image-col">
+          <img id="modalImg" src="" alt="Product Image" class="modal-img">
+        </div>
+        <div class="modal-info-col">
+          <div class="modal-tags">
+            <span id="modalCategory" class="badge">Category</span>
+            <span id="modalConditionBadge" class="badge badge-outline">Condition</span>
+          </div>
+          <h2 id="modalTitle">Product Title</h2>
+          <div class="modal-price" id="modalPrice">₹0</div>
+          
+          <div class="detail-row">
+            <span class="detail-label">Condition:</span> 
+            <span id="modalCondition" class="detail-value">Good</span>
+          </div>
+          
+          <div class="detail-row">
+            <span class="detail-label">Description:</span>
+            <p id="modalDescription" class="modal-desc-text"></p>
+          </div>
+
+          <div class="contact-box">
+            <div class="contact-label">Seller Contact Details</div>
+            <div id="modalContact" class="seller-contact-text"></div>
+            <div class="contact-tip">Tip: Tap Contact Seller below to copy details or connect.</div>
+          </div>
+
+          <div class="modal-actions">
+            <button class="btn-green" onclick="handleContactClick()">Contact Seller</button>
+            <button class="btn-secondary" onclick="closeModal()">Close</button>
+          </div>
+          <div id="contactCopiedNotice" class="copied-notice" style="display: none;">
+            ✓ Seller contact details copied to clipboard!
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <p><strong>Campus Reuse Hub</strong> &copy; 2026 &bull; Student Reuse Marketplace</p>
+      <p class="footer-sub">Encouraging sustainable reuse and affordable essentials for college students.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
